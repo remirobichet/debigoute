@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-container>
-      <b-row>
+    <b-container class="mb-5">
+      <b-row class="my-3">
         <b-col sm="3">
           <label for="base-liquid">Poche de base (mL)</label>
         </b-col>
@@ -13,11 +13,11 @@
           ></b-form-input>
         </b-col>
       </b-row>
-
-      <b-row v-for="(el, index) in addedLiquid" :key="el.index">
+      <hr />
+      <b-row class="my-3" v-for="(el, index) in addedLiquid" :key="el.index">
         <b-col sm="3">
           <label :for="'base-liquid-' + index"
-            >Solution additionnelle n° {{ index }} (mL)</label
+            >Solution additionnelle n° {{ index + 1}} (mL)</label
           >
         </b-col>
         <b-col sm="6">
@@ -28,17 +28,20 @@
           ></b-form-input>
         </b-col>
         <b-col sm="3" v-if="addedLiquid.length > 1">
-          <button @click="deleteRow(index)">Delete</button>
+          <b-button variant="outline-primary" @click="deleteRow(index)"
+            >Supprimer</b-button
+          >
         </b-col>
       </b-row>
-
-      <b-row>
+      <b-row class="my-3">
         <b-col sm="12">
-          <button @click="addRow">Add row</button>
+          <b-button variant="outline-primary" @click="addRow"
+            >Ajouter une ligne</b-button
+          >
         </b-col>
       </b-row>
-
-      <b-row>
+      <hr />
+      <b-row class="my-3">
         <b-col sm="3">
           <label for="time">Temps (heure)</label>
         </b-col>
@@ -50,8 +53,8 @@
           ></b-form-input>
         </b-col>
       </b-row>
-
-      <b-row>
+      <hr />
+      <b-row class="my-3">
         <b-col sm="3">
           <label for="drop">Equivalence 1ml = ? gouttes</label>
         </b-col>
@@ -64,19 +67,12 @@
         </b-col>
       </b-row>
     </b-container>
-
-    <hr />
     <b-container v-if="result || result.res">
-      <b-row>
-        <b-col sm="12">
-          <p>Résultats:</p>
-          <p>{{ result.res }} gouttes/minutes</p>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col sm="12">
-          <p>Calcul :</p>
+      <b-card title="Résultats" class="my-3">
+        <b-card-text>{{ result.res }} gouttes/minutes</b-card-text>
+      </b-card>
+      <b-card title="Calculs" class="my-3">
+        <b-card-text>
           <p>
             Total des Solution additionnelle :
             <span v-for="(el, index) in result.addedLiquid" :key="el.index">
@@ -110,8 +106,8 @@
             <br />
             {{ result.res }} gouttes en 1 minute
           </p>
-        </b-col>
-      </b-row>
+        </b-card-text>
+      </b-card>
     </b-container>
   </div>
 </template>
