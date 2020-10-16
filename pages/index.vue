@@ -1,114 +1,119 @@
 <template>
-  <b-container fluid>
-    <b-row>
-      <b-col sm="3">
-        <label for="base-liquid">Poche de base (mL)</label>
-      </b-col>
-      <b-col sm="9">
-        <b-form-input
-          v-model.number="baseLiquid"
-          id="base-liquid"
-          type="number"
-        ></b-form-input>
-      </b-col>
-    </b-row>
+  <div>
+    <b-container>
+      <b-row>
+        <b-col sm="3">
+          <label for="base-liquid">Poche de base (mL)</label>
+        </b-col>
+        <b-col sm="9">
+          <b-form-input
+            v-model.number="baseLiquid"
+            id="base-liquid"
+            type="number"
+          ></b-form-input>
+        </b-col>
+      </b-row>
 
-    <b-row class="my-1" v-for="(el, index) in addedLiquid" :key="el.index">
-      <b-col sm="3">
-        <label :for="'base-liquid-' + index"
-          >Solution additionnelle n° {{ index }} (mL)</label
-        >
-      </b-col>
-      <b-col sm="6">
-        <b-form-input
-          v-model.number="el.value"
-          :id="'base-liquid-' + index"
-          type="number"
-        ></b-form-input>
-      </b-col>
-      <b-col sm="3" v-if="addedLiquid.length > 1">
-        <button @click="deleteRow(index)">Delete</button>
-      </b-col>
-    </b-row>
+      <b-row v-for="(el, index) in addedLiquid" :key="el.index">
+        <b-col sm="3">
+          <label :for="'base-liquid-' + index"
+            >Solution additionnelle n° {{ index }} (mL)</label
+          >
+        </b-col>
+        <b-col sm="6">
+          <b-form-input
+            v-model.number="el.value"
+            :id="'base-liquid-' + index"
+            type="number"
+          ></b-form-input>
+        </b-col>
+        <b-col sm="3" v-if="addedLiquid.length > 1">
+          <button @click="deleteRow(index)">Delete</button>
+        </b-col>
+      </b-row>
 
-    <b-row>
-      <b-col sm="12">
-        <button @click="addRow">Add row</button>
-      </b-col>
-    </b-row>
+      <b-row>
+        <b-col sm="12">
+          <button @click="addRow">Add row</button>
+        </b-col>
+      </b-row>
 
-    <b-row>
-      <b-col sm="3">
-        <label for="time">Temps (heure)</label>
-      </b-col>
-      <b-col sm="9">
-        <b-form-input
-          v-model.number="time"
-          id="time"
-          type="number"
-        ></b-form-input>
-      </b-col>
-    </b-row>
+      <b-row>
+        <b-col sm="3">
+          <label for="time">Temps (heure)</label>
+        </b-col>
+        <b-col sm="9">
+          <b-form-input
+            v-model.number="time"
+            id="time"
+            type="number"
+          ></b-form-input>
+        </b-col>
+      </b-row>
 
-    <b-row>
-      <b-col sm="3">
-        <label for="drop">Equivalence 1ml = ? gouttes</label>
-      </b-col>
-      <b-col sm="9">
-        <b-form-input
-          v-model.number="drop"
-          id="drop"
-          type="number"
-        ></b-form-input>
-      </b-col>
-    </b-row>
+      <b-row>
+        <b-col sm="3">
+          <label for="drop">Equivalence 1ml = ? gouttes</label>
+        </b-col>
+        <b-col sm="9">
+          <b-form-input
+            v-model.number="drop"
+            id="drop"
+            type="number"
+          ></b-form-input>
+        </b-col>
+      </b-row>
+    </b-container>
 
     <hr />
+    <b-container v-if="result || result.res">
+      <b-row>
+        <b-col sm="12">
+          <p>Résultats:</p>
+          <p>{{ result.res }} gouttes/minutes</p>
+        </b-col>
+      </b-row>
 
-    <b-row>
-      <b-col sm="12">
-        <p>Résultats:</p>
-        <p>{{ result.res }} gouttes/minutes</p>
-      </b-col>
-    </b-row>
+      <b-row>
+        <b-col sm="12">
+          <p>Calcul :</p>
+          <p>
+            Total des Solution additionnelle :
+            <span v-for="(el, index) in result.addedLiquid" :key="el.index">
+              {{ el.value }}
+              <template v-if="index !== result.addedLiquid.length - 1">
+                +
+              </template></span
+            >
+            =
+            {{ result.totalAddedLiquid }}mL
+          </p>
+          <p>
+            Total des Solution (Solution de base + Total solutions
+            additionnelle):
+            {{ result.totalAddedLiquid }}
+            +
+            {{ result.baseLiquid }}
+            =
+            {{ result.totalLiquid }}mL
+          </p>
+          <p>
+            Total des gouttes : <br />
+            {{ result.drop }}mL = 1 goutte <br />
+            {{ result.totalLiquid }}mL = {{ result.totalDrop }} gouttes
+          </p>
 
-    <b-row>
-      <b-col sm="12">
-        <p>Calcul :</p>
-        <p>
-          Total des Solution additionnelle :
-          <span v-for="(el, index) in result.addedLiquid" :key="el.index">
-            {{ el.value }}
-            <template v-if="index !== result.addedLiquid.length - 1">
-              +
-            </template></span
-          >
-          =
-          {{ result.totalAddedLiquid }}mL
-        </p>
-        <p>
-          Total des Solution (Solution de base + Total solutions additionnelle):
-          {{ result.totalAddedLiquid }}
-          +
-          {{ result.baseLiquid }}
-          =
-          {{ result.totalLiquid }}mL
-        </p>
-        <p>
-          Total des gouttes : <br>
-          {{ result.drop }}mL = 1 goutte <br>
-          {{ result.totalLiquid }}mL = {{ result.totalDrop }} gouttes
-        </p>
-
-        <p>
-          Exprimé en gouttes/minutes : <br>
-          {{ result.totalDrop }} gouttes en {{ result.time }} heures <br>
-          {{ result.totalDrop }} gouttes en {{ result.timeMinute }} minutes <br>
-          {{ result.res }} gouttes en 1 minute
-        </p>
-      </b-col>
-    </b-row>
-  </b-container>
+          <p>
+            Exprimé en gouttes/minutes : <br />
+            {{ result.totalDrop }} gouttes en {{ result.time }} heures <br />
+            {{ result.totalDrop }} gouttes en {{ result.timeMinute }} minutes
+            <br />
+            {{ result.res }} gouttes en 1 minute
+          </p>
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
 </template>
 
 <script lang="ts">
@@ -156,8 +161,15 @@ export default Vue.extend({
 
       this.totalLiquid = this.totalAddedLiquid + this.baseLiquid
 
-      if (this.time === 0 || this.totalLiquid === 0 || this.drop === 0) {
-        return 0
+      if (
+        !this.time ||
+        this.time === 0 ||
+        !this.totalLiquid ||
+        this.totalLiquid === 0 ||
+        !this.drop ||
+        this.drop === 0
+      ) {
+        return false
       }
 
       this.totalDrop = this.totalLiquid * this.drop
