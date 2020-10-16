@@ -20,14 +20,14 @@
             >Solution additionnelle n° {{ index + 1}} (mL)</label
           >
         </b-col>
-        <b-col sm="6">
+        <b-col cols="6" sm="6">
           <b-form-input
             v-model.number="el.value"
             :id="'base-liquid-' + index"
             type="number"
           ></b-form-input>
         </b-col>
-        <b-col sm="3" v-if="addedLiquid.length > 1">
+        <b-col cols="6" sm="3" v-if="addedLiquid.length > 1">
           <b-button variant="outline-primary" @click="deleteRow(index)"
             >Supprimer</b-button
           >
