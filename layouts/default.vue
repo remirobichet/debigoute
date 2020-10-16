@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1 class="title">debigoute</h1>
-    <p>app pour infirmière blabla</p>
+    <h1 class="title">Débigout</h1>
+    <p>Calcul du débit en gouttes/minutes</p>
     <Nuxt />
   </div>
 </template>
