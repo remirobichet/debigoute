@@ -60,6 +60,15 @@ export default {
     bootstrapVueCSS: false,
   },
 
+  pwa: {
+    manifest: {
+      name: 'Débigoute',
+      short_name: 'Débigoute',
+      lang: 'fr',
+      display: 'standalone',
+    },
+  },
+
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
 }
