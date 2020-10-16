@@ -60,6 +60,10 @@ export default {
     bootstrapVueCSS: false,
   },
 
+  pwa: {
+    icon: false // disables the icon module
+  },
+
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
 }
